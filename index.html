@@ -1,220 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WLAN Power Socket Controller</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
 
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 400px
-        }
+      .container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 20px;
+        max-width: 400px;
+      }
 
-        .containerDevices {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 20px;
-            max-width: 100%;
-        }
+      .containerDevices {
+        background: white;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 20px;
+        max-width: 800px;
+      }
 
-        .container h1 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
-        }
+      .container h1 {
+        margin: 20px;
+        font-size: 24px;
+        color: #333;
+      }
 
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      .btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 30px;
+        font-size: 16px;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
 
-        .btn-on {
-            background-color: #4CAF50;
-        }
+      .btn-on {
+        background-color: #4caf50;
+      }
 
-        .btn-on:hover {
-            background-color: #45a049;
-        }
+      .btn-on:hover {
+        background-color: #45a049;
+      }
 
-        .btn-off {
-            background-color: #f44336;
-        }
+      .btn-off {
+        background-color: #f44336;
+      }
 
-        .btn-off:hover {
-            background-color: #e41e20;
-        }
+      .btn-off:hover {
+        background-color: #e41e20;
+      }
 
-        .status {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #555;
-        }
+      .status {
+        margin: 20px;
+        font-size: 18px;
+        color: #555;
+      }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+      .form-group {
+        margin: 15px;
+      }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
+      label {
+        display: block;
+        margin: 5px;
+      }
 
-        input {
-            width: auto;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+      input {
+        width: auto;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
 
-        .device-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
-        }
+      .device-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        max-width: 800px;
+        margin: 2vh;
+      }
 
-        .device {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+      .device {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 1vh;
+      }
 
-        .device h2 {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
+      .device h2 {
+        margin: 10px;
+        font-size: 20px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>Add New Device</h1>
-        <div class="form-group">
-            <label for="deviceName">Device Name:</label>
-            <input type="text" id="deviceName" placeholder="Enter device name">
-        </div>
-        <div class="form-group">
-            <label for="deviceIP">Device IP:</label>
-            <input type="text" id="deviceIP" placeholder="Enter device IP">
-        </div>
-        <button class="btn btn-on" onclick="addDevice()">Add Device</button>
-        <div class="status" id="addStatus"></div>
+      <h1>Add New Device</h1>
+      <div class="form-group">
+        <label for="deviceName">Device Name:</label>
+        <input type="text" id="deviceName" placeholder="Enter device name" />
+      </div>
+      <div class="form-group">
+        <label for="deviceIP">Device IP:</label>
+        <input type="text" id="deviceIP" placeholder="Enter device IP" />
+      </div>
+      <button class="btn btn-on" onclick="addDevice()">Add Device</button>
     </div>
     <div class="containerDevices">
-        <h1>Devices</h1>
-        <div id="deviceList" class="device-list">No devices added yet.</div>
+      <h1>Devices</h1>
+      <div id="deviceList" class="device-list">No devices added yet.</div>
     </div>
 
     <script>
-        const devices = [];
+      const devices = [];
 
-        async function addDevice() {
-            const name = document.getElementById('deviceName').value;
-            const ip = document.getElementById('deviceIP').value;
-            const statusElement = document.getElementById('addStatus');
+      async function addDevice() {
+        const name = document.getElementById("deviceName").value;
+        const ip = document.getElementById("deviceIP").value;
+        const statusElement = document.getElementById("addStatus");
 
-            if (!name || !ip) {
-                statusElement.textContent = "Name and IP are required.";
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/add_device', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name, ip }),
-                });
-
-                if (response.ok) {
-                    devices.push({ name, ip });
-                    updateDeviceList();
-                    statusElement.textContent = "Device added successfully.";
-                } else {
-                    statusElement.textContent = "Error adding device.";
-                }
-            } catch (error) {
-                statusElement.textContent = `Error: ${error.message}`;
-            }
+        if (!name || !ip) {
+          statusElement.textContent = "Name and IP are required.";
+          return;
         }
 
-        function updateDeviceList() {
-            const container = document.getElementById('deviceList');
-            if (devices.length === 0) {
-                container.textContent = "No devices added yet.";
-                return;
-            }
+        try {
+          const response = await fetch("/api/add_device", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, ip }),
+          });
 
-            container.innerHTML = '';
-            devices.forEach(device => {
-                const deviceDiv = document.createElement('div');
-                deviceDiv.className = 'device';
-                deviceDiv.innerHTML = `
+          if (response.ok) {
+            devices.push({ name, ip, status: "Unknown" });
+            updateDeviceList();
+            statusElement.textContent = "Device added successfully.";
+          } else {
+            statusElement.textContent = "Error adding device.";
+          }
+        } catch (error) {
+          statusElement.textContent = `Error: ${error.message}`;
+        }
+      }
+
+      function updateDeviceList() {
+        const container = document.getElementById("deviceList");
+        if (devices.length === 0) {
+          container.textContent = "No devices added yet.";
+          return;
+        }
+
+        container.innerHTML = "";
+        devices.forEach((device) => {
+          const deviceDiv = document.createElement("div");
+          deviceDiv.className = "device";
+          deviceDiv.innerHTML = `
                     <h2>${device.name}</h2>
+                    <div class="status">Status: <span id="status-${device.name}">${device.status}</span></div>
                     <button class="btn btn-on" onclick="controlDevice('${device.name}', 'on')">Turn On</button>
                     <button class="btn btn-off" onclick="controlDevice('${device.name}', 'off')">Turn Off</button>
+                    <div class="status" id="addStatus-${device.name}"></div>
                 `;
-                container.appendChild(deviceDiv);
-            });
-        }
+          container.appendChild(deviceDiv);
+        });
+      }
 
-        async function controlDevice(name, action) {
-            const statusElement = document.getElementById('addStatus');
-            try {
-                const response = await fetch('/api/relay', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ device: name, action }),
-                });
+      async function controlDevice(name, action) {
+        const statusElement = document.getElementById("addStatus-" + name);
+        const statusDisplay = document.getElementById(`status-${name}`);
+        try {
+          const response = await fetch("/api/relay", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ device: name, action }),
+          });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    statusElement.textContent = `Status: ${data.message}`;
-                } else {
-                    statusElement.textContent = "Error controlling device.";
-                }
-            } catch (error) {
-                statusElement.textContent = `Error: ${error.message}`;
-            }
+          if (response.ok) {
+            const data = await response.json();
+            statusElement.textContent = `Status: ${data.message}`;
+            statusDisplay.textContent = action === "on" ? "On" : "Off";
+          } else {
+            statusElement.textContent = "Error controlling device.";
+          }
+        } catch (error) {
+          statusElement.textContent = `Error: ${error.message}`;
         }
+      }
     </script>
-</body>
-
+  </body>
 </html>
