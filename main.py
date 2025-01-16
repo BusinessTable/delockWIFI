@@ -1,9 +1,23 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import (
+    Flask,
+    request,
+    jsonify,
+    send_from_directory,
+    session,
+    redirect,
+    url_for,
+)
+from dotenv import load_dotenv
 import os
 import json
 import requests
 
+# Load environment variables
+load_dotenv()
+PASSWORD = os.getenv("PASSWORD")
+
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Secret key for session management
 
 # File to store device information
 devices_file = "devices.json"
@@ -23,12 +37,31 @@ def save_devices():
 
 
 @app.route("/")
-def serve_index():
+def index():
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect(url_for("login"))
     return send_from_directory(os.path.dirname(__file__), "index.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        entered_password = request.form.get("password")
+        if entered_password == PASSWORD:
+            session["logged_in"] = True
+            return redirect(url_for("index"))
+        else:
+            return (
+                """<h3>Invalid password. Please try again.</h3><a href='/login'>Go back</a>""",
+                401,
+            )
+    return send_from_directory(os.path.dirname(__file__), "login.html")
 
 
 @app.route("/<path:filename>")
 def serve_static_files(filename):
+    if "logged_in" not in session or not session["logged_in"]:
+        return redirect(url_for("login"))
     return send_from_directory(os.path.dirname(__file__), filename)
 
 
