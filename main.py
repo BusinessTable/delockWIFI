@@ -1,11 +1,25 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
+import json
 import requests
 
 app = Flask(__name__)
 
-# Store devices in memory (can be replaced with a database)
-devices = []
+# File to store device information
+devices_file = "devices.json"
+
+# Load devices from file
+if os.path.exists(devices_file):
+    with open(devices_file, "r") as file:
+        devices = json.load(file)
+else:
+    devices = []
+
+
+# Save devices to file
+def save_devices():
+    with open(devices_file, "w") as file:
+        json.dump(devices, file)
 
 
 @app.route("/")
@@ -31,16 +45,17 @@ def control_relay():
 
     if action == "on":
         url = f"http://{device['ip']}/cm?cmnd=Power%20On"
+        device["status"] = "On"
     elif action == "off":
         url = f"http://{device['ip']}/cm?cmnd=Power%20Off"
-    elif action == "toggle":
-        url = f"http://{device['ip']}/cm?cmnd=Power%20Toggle"
+        device["status"] = "Off"
     else:
         return jsonify({"message": "Invalid action"}), 400
 
     try:
         response = requests.get(url)
         if response.status_code == 200:
+            save_devices()  # Update status in the file
             return jsonify({"message": f"Relay turned {action}"}), 200
         else:
             return jsonify({"message": "Failed to control the relay"}), 500
@@ -57,8 +72,19 @@ def add_device():
     if not name or not ip:
         return jsonify({"message": "Name and IP are required"}), 400
 
-    devices.append({"name": name, "ip": ip})
+    # Check if the device already exists
+    if any(d["name"] == name for d in devices):
+        return jsonify({"message": "Device with this name already exists"}), 400
+
+    new_device = {"name": name, "ip": ip, "status": "Unknown"}
+    devices.append(new_device)
+    save_devices()  # Save to file
     return jsonify({"message": "Device added successfully"}), 200
+
+
+@app.route("/api/get_devices", methods=["GET"])
+def get_devices():
+    return jsonify(devices), 200
 
 
 if __name__ == "__main__":
